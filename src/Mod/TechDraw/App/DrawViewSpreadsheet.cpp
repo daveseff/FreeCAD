@@ -356,7 +356,8 @@ std::string DrawViewSpreadsheet::getSheetImage(void)
                            << " fill=\"" << fcolor << "\">" << celltext << "</text>" << endl;
                 }
             }
-            rowoffset = rowoffset + sheet->getRowHeight(address.row());
+	    cellheight = sheet->getRowHeight(address.row());
+            rowoffset = rowoffset + cellheight;
         }
         result << "  </g>" << endl;
         rowoffset = 0.0;
