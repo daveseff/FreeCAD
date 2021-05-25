@@ -120,6 +120,7 @@ class PathWorkbench (Workbench):
             extracmdlist.extend(["Path_Area", "Path_Area_Workplane"])
             specialcmdlist.append('Path_Thread_Milling')
             twodopcmdlist.append("Path_Slot")
+            twodopcmdlist.append("Path_Jet")
 
         if PathPreferences.advancedOCLFeaturesEnabled():
             try:
