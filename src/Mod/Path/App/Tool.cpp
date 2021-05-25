@@ -124,6 +124,7 @@ const std::vector<std::string> Tool::ToolTypes(void)
     toolTypes[10] ="ChamferMill";
     toolTypes[11] ="CornerRound";
     toolTypes[12] ="Engraver";
+    toolTypes[13] ="Jet";
     return toolTypes;
 
 }
@@ -171,6 +172,8 @@ Tool::ToolType Tool::getToolType(std::string type)
         Type = Tool::CORNERROUND;
     else if(type=="Engraver")
         Type = Tool::ENGRAVER;
+    else if(type=="Jet")
+        Type = Tool::JET;
     else
         Type = Tool::UNDEFINED;
 
@@ -228,6 +231,8 @@ const char* Tool::TypeName(Tool::ToolType typ) {
         return "CornerRound";
       case Tool::ENGRAVER:
         return "Engraver";
+      case Tool::JET:
+        return "Jet";
       case Tool::UNDEFINED:
         return "Undefined";
     }

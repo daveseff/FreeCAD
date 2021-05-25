@@ -54,6 +54,7 @@ def Startup():
         from PathScripts import PathEngraveGui
         from PathScripts import PathFixture
         from PathScripts import PathHelixGui
+        from PathScripts import PathJetGui
         from PathScripts import PathHop
         from PathScripts import PathInspect
         from PathScripts import PathMillFaceGui
