@@ -356,12 +356,7 @@ std::string DrawViewSpreadsheet::getSheetImage(void)
                            << " fill=\"" << fcolor << "\">" << celltext << "</text>" << endl;
                 }
             }
-<<<<<<< HEAD
-	    cellheight = sheet->getRowHeight(address.row());
-            rowoffset = rowoffset + cellheight;
-=======
             rowoffset = rowoffset + sheet->getRowHeight(address.row());
->>>>>>> 60a75e5d24 (Fix TechDraw View Spreadsheet with merged cells, 2)
         }
         result << "  </g>" << endl;
         rowoffset = 0.0;
