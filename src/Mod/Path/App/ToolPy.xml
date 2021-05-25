@@ -16,7 +16,7 @@
             <UserDocu>The Tool objects holds the properties of a CNC tool.
 optional attributes:
   name: a user-defined name for this tool
-  tooltype: Drill, CenterDrill, CounterSink, CounterBore, Reamer, Tap, EndMill, SlotCutter, BallEndMill, ChamferMill, CornerRound, Engraver or Undefined
+  tooltype: Drill, CenterDrill, CounterSink, CounterBore, Reamer, Tap, EndMill, SlotCutter, BallEndMill, ChamferMill, CornerRound, Engraver, Jet or Undefined
   material: HighSpeedSteel, HighCarbonToolSteel, Carbide, CastAlloy, Ceramics, Diamond, Sialon or Undefined
   diameter : the diameter of this tool
   lengthOffset

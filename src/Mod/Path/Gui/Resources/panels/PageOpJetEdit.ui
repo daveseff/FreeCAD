@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+  <class>Form</class>
+  <widget class="QWidget" name="Form">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>454</width>
+        <height>386</height>
+      </rect>
+    </property>
+    <property name="windowTitle">
+      <string>Form</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+        <widget class="QFrame" name="frame">
+          <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+                <property name="text">
+                  <string>ToolController</string>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1">
+              <widget class="QComboBox" name="toolController">
+                <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The tool and its settings to be used for this operation.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0">
+              <widget class="QLabel" name="label_3">
+                <property name="text">
+                  <string>Cut Offset</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1">
+              <widget class="QComboBox" name="cuttingOffset">
+                <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The cut offset based on the kerf of the cutting operation.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item row="1" column="0">
+        <widget class="QWidget" name="widget" native="true">
+          <layout class="QGridLayout" name="gridLayout">
+            <item row="6" column="4">
+              <widget class="QLabel" name="reverseCutDirection">
+                <property name="enabled">
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item row="2" column="0">
+        <spacer name="verticalSpacer">
+          <property name="orientation">
+            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+            <size>
+              <width>20</width>
+              <height>40</height>
+            </size>
+          </property>
+        </spacer>
+      </item>
+    </layout>
+  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>Gui::QuantitySpinBox</class>
+      <extends>QDoubleSpinBox</extends>
+      <header>Gui/QuantitySpinBox.h</header>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
+    <tabstop>toolController</tabstop>
+    <tabstop>peckEnabled</tabstop>
+    <tabstop>dwellEnabled</tabstop>
+  </tabstops>
+  <resources/>
+  <connections/>
+</ui>

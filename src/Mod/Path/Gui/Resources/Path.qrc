@@ -34,6 +34,7 @@
         <file>icons/Path_Helix.svg</file>
         <file>icons/Path_Hop.svg</file>
         <file>icons/Path_Inspect.svg</file>
+        <file>icons/Path_Jet.svg</file>
         <file>icons/Path_Job.svg</file>
         <file>icons/Path_Kurve.svg</file>
         <file>icons/Path_LengthOffset.svg</file>
@@ -111,6 +112,7 @@
         <file>panels/PageOpDrillingEdit.ui</file>
         <file>panels/PageOpEngraveEdit.ui</file>
         <file>panels/PageOpHelixEdit.ui</file>
+        <file>panels/PageOpJetEdit.ui</file>
         <file>panels/PageOpPocketExtEdit.ui</file>
         <file>panels/PageOpPocketFullEdit.ui</file>
         <file>panels/PageOpProbeEdit.ui</file>
