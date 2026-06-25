@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   version="1.1"
+   viewBox="0 0 210 297"
+   width="210mm"
+   height="297mm">
+  <defs>
+    <linearGradient id="torchBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#59626d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#242a31;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldCup" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#c9924d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#81531d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="arcGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffe8a6;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#ff7a00;stop-opacity:0.65" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="210" height="297" fill="#fbfbf7" />
+  <rect x="18" y="18" width="174" height="261" rx="10" ry="10" fill="#ffffff" stroke="#d0d4d8" stroke-width="1.4" />
+  <text x="105" y="36" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="bold" fill="#1d252c">Plasma Torch</text>
+  <text x="105" y="49" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="5" fill="#56606a">Process parameters for jet cutting</text>
+
+  <rect x="81" y="62" width="48" height="88" rx="8" ry="8" fill="url(#torchBody)" stroke="#14181c" stroke-width="1.2" />
+  <rect x="86" y="72" width="38" height="18" rx="4" ry="4" fill="#72808c" opacity="0.55" />
+  <rect x="89" y="150" width="32" height="30" rx="4" ry="4" fill="url(#shieldCup)" stroke="#704516" stroke-width="1" />
+  <path d="M 96 180 L 114 180 L 109 202 L 101 202 Z" fill="#5a3313" stroke="#47270e" stroke-width="0.9" />
+  <path d="M 105 202 L 114 224 L 105 238 L 96 224 Z" fill="url(#arcGlow)" stroke="#ff7a00" stroke-width="0.8" opacity="0.95" />
+  <path d="M 105 202 L 105 244" stroke="#ffb000" stroke-width="1.6" stroke-dasharray="2.4,2.4" />
+  <line x1="58" y1="245" x2="152" y2="245" stroke="#7b8792" stroke-width="1.2" />
+  <text x="156" y="248" font-family="DejaVu Sans, Arial, sans-serif" font-size="5" fill="#55616b">Plate top</text>
+
+  <line x1="136" y1="205" x2="170" y2="205" stroke="#2f3942" stroke-width="0.8" />
+  <line x1="136" y1="221" x2="170" y2="221" stroke="#2f3942" stroke-width="0.8" />
+  <line x1="166" y1="205" x2="166" y2="221" stroke="#2f3942" stroke-width="0.8" />
+  <text id="kerf_width" x="173" y="215" font-family="DejaVu Sans, Arial, sans-serif" font-size="5.2" fill="#1d252c">KW</text>
+
+  <line x1="38" y1="184" x2="38" y2="245" stroke="#2f3942" stroke-width="0.8" />
+  <line x1="35" y1="184" x2="41" y2="184" stroke="#2f3942" stroke-width="0.8" />
+  <line x1="35" y1="245" x2="41" y2="245" stroke="#2f3942" stroke-width="0.8" />
+  <text id="pierce_height" x="24" y="214" font-family="DejaVu Sans, Arial, sans-serif" font-size="5.2" fill="#1d252c">PH</text>
+
+  <line x1="50" y1="198" x2="50" y2="245" stroke="#2f3942" stroke-width="0.8" />
+  <line x1="47" y1="198" x2="53" y2="198" stroke="#2f3942" stroke-width="0.8" />
+  <line x1="47" y1="245" x2="53" y2="245" stroke="#2f3942" stroke-width="0.8" />
+  <text id="cut_height" x="18" y="232" font-family="DejaVu Sans, Arial, sans-serif" font-size="5.2" fill="#1d252c">CH</text>
+
+  <path d="M 60 188 C 71 188, 76 188, 82 194" fill="none" stroke="#0f766e" stroke-width="1.4" />
+  <polygon points="81,191 88,198 79,198" fill="#0f766e" />
+  <text id="plunge_rate" x="34" y="188" font-family="DejaVu Sans, Arial, sans-serif" font-size="5.2" fill="#0f766e">PR</text>
+
+  <path d="M 128 198 C 147 191, 160 177, 164 162" fill="none" stroke="#9a3412" stroke-width="1.2" stroke-dasharray="2.2,1.8" />
+  <text id="pierce_delay" x="166" y="159" font-family="DejaVu Sans, Arial, sans-serif" font-size="5.2" fill="#9a3412">PD</text>
+
+  <path d="M 123 234 C 141 238, 151 242, 161 252" fill="none" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="2.2,1.8" />
+  <text id="end_pause" x="164" y="258" font-family="DejaVu Sans, Arial, sans-serif" font-size="5.2" fill="#7c3aed">EP</text>
+
+  <rect x="28" y="255" width="154" height="16" rx="3" ry="3" fill="#f4f6f8" stroke="#d5d9dd" stroke-width="0.8" />
+  <text x="34" y="265" font-family="DejaVu Sans, Arial, sans-serif" font-size="4.6" fill="#1d252c">KW kerf width</text>
+  <text x="82" y="265" font-family="DejaVu Sans, Arial, sans-serif" font-size="4.6" fill="#1d252c">PD pierce delay</text>
+  <text x="132" y="265" font-family="DejaVu Sans, Arial, sans-serif" font-size="4.6" fill="#1d252c">EP end pause</text>
+  <text x="34" y="270.6" font-family="DejaVu Sans, Arial, sans-serif" font-size="4.6" fill="#1d252c">PH pierce height</text>
+  <text x="82" y="270.6" font-family="DejaVu Sans, Arial, sans-serif" font-size="4.6" fill="#1d252c">PR plunge rate</text>
+  <text x="132" y="270.6" font-family="DejaVu Sans, Arial, sans-serif" font-size="4.6" fill="#1d252c">CH cut height</text>
+</svg>

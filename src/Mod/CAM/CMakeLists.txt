@@ -375,6 +375,7 @@ SET(PathPythonOp_SRCS
     Path/Op/FeatureExtension.py
     Path/Op/Drilling.py
     Path/Op/Helix.py
+    Path/Op/JetProfile.py
     Path/Op/MillFace.py
     Path/Op/MillFacing.py
     Path/Op/Pocket.py
@@ -407,6 +408,7 @@ SET(PathPythonOpGui_SRCS
     Path/Op/Gui/Engrave.py
     Path/Op/Gui/FeatureExtension.py
     Path/Op/Gui/Helix.py
+    Path/Op/Gui/JetProfile.py
     Path/Op/Gui/MillFace.py
     Path/Op/Gui/MillFacing.py
     Path/Op/Gui/PathShapeTC.py
@@ -480,12 +482,15 @@ SET(Tools_Bit_SRCS
     Tools/Bit/6mm_Bullnose.fctb
     Tools/Bit/90degree_Vbit.fctb
     Tools/Bit/M8x1.25_Tap.fctb
+    Tools/Bit/plasma.fctb
+    Tools/Bit/plasma_torch.fctb
     Tools/Bit/probe.fctb
     Tools/Bit/slittingsaw.fctb
 )
 
 SET(Tools_Library_SRCS
     Tools/Library/Default.fctl
+    Tools/Library/Plasma.fctl
 )
 
 SET(Tools_Shape_SRCS
@@ -505,6 +510,7 @@ SET(Tools_Shape_SRCS
     Tools/Shape/radius.svg
     Tools/Shape/probe.fcstd
     Tools/Shape/probe.svg
+    Tools/Shape/plasma.svg
     Tools/Shape/reamer.fcstd
     Tools/Shape/reamer.svg
     Tools/Shape/slittingsaw.fcstd

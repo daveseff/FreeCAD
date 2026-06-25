@@ -142,6 +142,7 @@ class CAMWorkbench(Workbench):
         ]
         twodopcmdlist = [
             "CAM_Profile",
+            "CAM_JetProfile",
             "CAM_Pocket_Shape",
             "CAM_MillFacing",
             "CAM_Helix",

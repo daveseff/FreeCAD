@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "name": "Plasma Torch",
+  "shape": "probe.fcstd",
+  "shape-type": "plasma",
+  "parameter": {
+    "Diameter": "1.5000 mm",
+    "Length": "60.0000 mm",
+    "ShaftDiameter": "20.0000 mm"
+  },
+  "attribute": {
+    "Material": "Carbide"
+  }
+}
