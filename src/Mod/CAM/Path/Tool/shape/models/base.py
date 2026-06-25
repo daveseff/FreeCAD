@@ -623,7 +623,12 @@ class ToolBitShape(Asset):
             The normalized value, potentially converted to a FreeCAD.Units.Quantity.
         """
         prop_type = self.get_parameter_property_type(name)
-        if prop_type in ("App::PropertyDistance", "App::PropertyLength", "App::PropertyAngle"):
+        if prop_type in (
+            "App::PropertyDistance",
+            "App::PropertyLength",
+            "App::PropertyAngle",
+            "App::PropertySpeed",
+        ):
             return FreeCAD.Units.Quantity(value)
         elif prop_type == "App::PropertyInteger":
             return int(value)

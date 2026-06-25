@@ -59,10 +59,12 @@ class DetachedDocumentObject:
             self._property_docs[name] = doc
             if thetype in [
                 "App::PropertyQuantity",
+                "App::PropertyDistance",
                 "App::PropertyLength",
                 "App::PropertyArea",
                 "App::PropertyVolume",
                 "App::PropertyAngle",
+                "App::PropertySpeed",
             ]:
                 # Initialize Quantity properties with a default value
                 self._properties[name] = FreeCAD.Units.Quantity(0.0)
@@ -113,10 +115,12 @@ class DetachedDocumentObject:
         # Attempt to convert string values to Quantity if the property type is Quantity
         elif prop_type in [
             "App::PropertyQuantity",
+            "App::PropertyDistance",
             "App::PropertyLength",
             "App::PropertyArea",
             "App::PropertyVolume",
             "App::PropertyAngle",
+            "App::PropertySpeed",
         ]:
             value = FreeCAD.Units.Quantity(value)
 

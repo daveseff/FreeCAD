@@ -52,7 +52,9 @@
         "aliases": [
             "probe"
         ],
-        "subtypes": []
+        "subtypes": [
+            "plasma"
+        ]
     },
     "Radius": {
         "aliases": [

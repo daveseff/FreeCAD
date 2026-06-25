@@ -50,7 +50,16 @@ def units_from_json(params):
     imperial_count = 0
     metric_count = 0
 
-    for param_name in ("Diameter", "ShankDiameter", "Length", "CuttingEdgeLength"):
+    for param_name in (
+        "Diameter",
+        "ShankDiameter",
+        "Length",
+        "CuttingEdgeLength",
+        "KerfWidth",
+        "PierceHeight",
+        "CutHeight",
+        "PlungeRate",
+    ):
         value = params.get(param_name)
         if value is not None:
             # Check if it's a string with unit suffix

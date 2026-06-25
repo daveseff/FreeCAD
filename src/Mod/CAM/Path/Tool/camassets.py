@@ -43,9 +43,46 @@ def ensure_library_assets_initialized(asset_manager: AssetManager, store_name: s
     """
     builtin_library_path = Preferences.getBuiltinLibraryPath()
 
-    if asset_manager.is_empty("toolbitlibrary", store=store_name):
-        for path in builtin_library_path.glob("*.fctl"):
+    for path in builtin_library_path.glob("*.fctl"):
+        uri = AssetUri.build(
+            asset_type="toolbitlibrary",
+            asset_id=path.stem,
+        )
+        if not asset_manager.exists(uri, store=store_name):
             asset_manager.add_file("toolbitlibrary", path)
+
+    _ensure_library_contains_tool(
+        Preferences.getAssetPath() / "Tools" / "Library" / "Default.fctl",
+        "plasma_torch.fctb",
+    )
+    _ensure_library_contains_tool(
+        Preferences.getAssetPath() / "Tools" / "Library" / "Plasma.fctl",
+        "plasma_torch.fctb",
+    )
+
+
+def _ensure_library_contains_tool(library_path: pathlib.Path, tool_path: str):
+    if not library_path.exists():
+        return
+
+    try:
+        data = json.loads(library_path.read_text())
+    except Exception as exc:
+        Path.Log.error(f"Failed to read tool library {library_path}: {exc}")
+        return
+
+    tools = data.setdefault("tools", [])
+    if any(tool.get("path") == tool_path for tool in tools):
+        return
+
+    used_numbers = {tool.get("nr", 0) for tool in tools if isinstance(tool.get("nr", 0), int)}
+    next_number = max(used_numbers or {0}) + 1
+    tools.append({"nr": next_number, "path": tool_path})
+
+    try:
+        library_path.write_text(json.dumps(data, indent=2) + "\n")
+    except Exception as exc:
+        Path.Log.error(f"Failed to update tool library {library_path}: {exc}")
 
 
 def ensure_toolbits_have_shape_type(asset_manager: AssetManager, store_name: str = "local"):
@@ -102,8 +139,12 @@ def ensure_toolbit_assets_initialized(asset_manager: AssetManager, store_name: s
     """
     builtin_toolbit_path = Preferences.getBuiltinToolBitPath()
 
-    if asset_manager.is_empty("toolbit", store=store_name):
-        for path in builtin_toolbit_path.glob("*.fctb"):
+    for path in builtin_toolbit_path.glob("*.fctb"):
+        uri = AssetUri.build(
+            asset_type="toolbit",
+            asset_id=path.stem,
+        )
+        if not asset_manager.exists(uri, store=store_name):
             asset_manager.add_file("toolbit", path)
 
     ensure_toolbits_have_shape_type(asset_manager, store_name)

@@ -67,6 +67,7 @@ def Startup():
         from Path.Op.Gui import Drilling
         from Path.Op.Gui import Engrave
         from Path.Op.Gui import Helix
+        from Path.Op.Gui import JetProfile
         from Path.Op.Gui import MillFace
         from Path.Op.Gui import MillFacing
         from Path.Op.Gui import PathShapeTC
