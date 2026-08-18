@@ -62,6 +62,15 @@ class ToolControllerTemplate:
     VertRapid = "vrapid"
 
 
+def _tool_subtype(tool):
+    if hasattr(tool, "Proxy") and hasattr(tool.Proxy, "get_subtype"):
+        subtype = tool.Proxy.get_subtype()
+        if subtype:
+            return str(subtype).lower()
+    shape_type = getattr(tool, "ShapeType", "")
+    return str(shape_type).lower() if shape_type else ""
+
+
 def _migrateRampDressups(tc):
     # Enumerate ramp dressups using this TC and their feed rates
     ramps = set()
@@ -469,6 +478,11 @@ def Create(
 
         if hasattr(obj.Tool, "SpindleDirection"):
             obj.SpindleDir = obj.Tool.SpindleDirection
+        if _tool_subtype(obj.Tool) == "plasma" and hasattr(obj.Tool, "PlungeRate"):
+            if obj.HorizFeed.Value <= 0:
+                obj.HorizFeed = obj.Tool.PlungeRate
+            if obj.VertFeed.Value <= 0:
+                obj.VertFeed = obj.Tool.PlungeRate
 
     obj.ToolNumber = toolNumber
     return obj

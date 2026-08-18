@@ -711,7 +711,11 @@ class ToolBitShape(Asset):
         Generates the body of the ToolBitShape and copies it to the provided
         document.
         """
-        assert self._data is not None
+        if self._data is None:
+            Path.Log.error(
+                f"ToolBitShape '{self.name}' ({self.id}) has no shape data; cannot create body."
+            )
+            return None
         with ShapeDocFromBytes(self._data) as tmp_doc:
             shape = find_shape_object(tmp_doc)
             if not shape:

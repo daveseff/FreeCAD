@@ -110,6 +110,7 @@ class ToolBit(Asset, ABC):
         self._shape_type = attrs.get("shape-type") if attrs else tool_bit_shape.name
         # Unknown top-level keys; merged back on save so third-party extensions survive round-trips.
         self._extra_attrs: dict = {}
+        self._sync_shape_subtype_property()
 
     def __eq__(self, other):
         """Compare ToolBit objects based on their unique ID."""
@@ -337,11 +338,22 @@ class ToolBit(Asset, ABC):
                 "Base",
                 QT_TRANSLATE_NOOP("App::Property", "The unique ID of the toolbit"),
             )
+        if not hasattr(self.obj, "ShapeSubtype"):
+            self.obj.addProperty(
+                "App::PropertyString",
+                "ShapeSubtype",
+                "Base",
+                QT_TRANSLATE_NOOP(
+                    "App::Property",
+                    "The tool shape subtype or alias used to create the toolbit",
+                ),
+            )
 
         # 0 = read/write, 1 = read only, 2 = hide
         self.obj.setEditorMode("ShapeID", 1)
         self.obj.setEditorMode("ShapeType", 1)
         self.obj.setEditorMode("ToolBitID", 1)
+        self.obj.setEditorMode("ShapeSubtype", 1)
         self.obj.setEditorMode("BitBody", 2)
         self.obj.setEditorMode("Shape", 2)
 
@@ -374,6 +386,28 @@ class ToolBit(Asset, ABC):
             )
             self.obj.Material = ["HSS", "Carbide"]
             self.obj.Material = "HSS"  # Default value
+
+    def _sync_shape_subtype_property(self):
+        shape_type = getattr(self, "_shape_type", None) or self._tool_bit_shape.name
+        self.obj.ShapeSubtype = (
+            shape_type if shape_type.lower() != self._tool_bit_shape.name.lower() else ""
+        )
+
+    def _restore_shape_type(self):
+        subtype = getattr(self.obj, "ShapeSubtype", "")
+        if subtype:
+            return subtype
+
+        if (
+            getattr(self.obj, "ShapeType", "") == "Probe"
+            and all(
+                name in self.obj.PropertiesList
+                for name in ("PierceDelay", "PierceHeight", "PlungeRate", "CutHeight")
+            )
+        ):
+            return "plasma"
+
+        return self.obj.ShapeType
 
     def get_id(self) -> str:
         """Returns the unique ID of the tool bit."""
@@ -527,18 +561,21 @@ class ToolBit(Asset, ABC):
         # as well.
         self._create_base_properties()
         self._promote_toolbit()
+        self._shape_type = self._restore_shape_type()
 
-        # Get the shape instance based on the ShapeType. We try two approaches
-        # to find the shape and shape class:
-        #   1. If the asset with the given type exists, use that.
-        #   2. Otherwise create a new empty instance
-        shape_uri = ToolBitShape.resolve_name(self.obj.ShapeType)
+        # Reload the canonical base shape asset from ShapeID.
+        # For subtypes such as "plasma", _shape_type preserves the subtype
+        # identity but does not correspond to a standalone .fcstd shape file.
+        shape_id = getattr(self.obj, "ShapeID", "") or getattr(self.obj, "ShapeType", "")
+        shape_uri = ToolBitShape.resolve_name(shape_id)
         try:
-            # Best case: we directly find the shape file in our assets.
             self._tool_bit_shape = cast(ToolBitShape, cam_assets.get(shape_uri))
         except FileNotFoundError:
-            # Otherwise, try to at least identify the type of the shape.
-            shape_class = ToolBitShape.get_subclass_by_name(shape_uri.asset_id)
+            # Otherwise, identify the base shape class from ShapeType first,
+            # then fall back to the asset id.
+            shape_class = ToolBitShape.get_subclass_by_name(getattr(self.obj, "ShapeType", ""))
+            if not shape_class:
+                shape_class = ToolBitShape.get_subclass_by_name(shape_uri.asset_id)
             if not shape_class:
                 raise ValueError(
                     "Failed to identify class of ToolBitShape from name "
@@ -589,6 +626,7 @@ class ToolBit(Asset, ABC):
 
         # Ensure property state is correct after restore.
         self._update_tool_properties()
+        self._sync_shape_subtype_property()
 
     def attach_to_doc(
         self, doc: FreeCAD.Document, label: Optional[str] = None

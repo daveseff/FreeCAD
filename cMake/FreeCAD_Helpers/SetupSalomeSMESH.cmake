@@ -62,6 +62,16 @@ macro(SetupSalomeSMESH)
             find_package(VTK REQUIRED NO_MODULE)
         endif()
 
+        # Some VTK 9 packages export VTK::scn with an interface dependency on the
+        # header-only FastFloat::fast_float target, but do not provide a
+        # discoverable FastFloat CMake package. Add a minimal compatibility target
+        # so downstream linking resolves cleanly instead of producing
+        # '-lFastFloat::fast_float' on the link line.
+        if(TARGET VTK::scn AND NOT TARGET FastFloat::fast_float)
+            add_library(FastFloat::fast_float INTERFACE IMPORTED)
+            message(STATUS "Created compatibility target FastFloat::fast_float for VTK::scn")
+        endif()
+
         set(BUILD_FEM_VTK ON)
 
         # Check if PythonWrapperCore was found
