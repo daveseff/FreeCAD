@@ -48,27 +48,34 @@ class TaskPanelOpPage(PathOpGui.TaskPanelPage):
         layout.addWidget(form.toolController, row, 1)
         row += 1
 
-        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Coolant")), row, 0)
-        form.coolantController = QtWidgets.QComboBox()
-        layout.addWidget(form.coolantController, row, 1)
-        row += 1
-
         layout.addWidget(QtWidgets.QLabel(self.pageLabel("Cut side")), row, 0)
         form.cutSide = QtWidgets.QComboBox()
         layout.addWidget(form.cutSide, row, 1)
         row += 1
 
-        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Kerf width")), row, 0)
-        form.kerfWidth = QtWidgets.QLineEdit()
-        layout.addWidget(form.kerfWidth, row, 1)
+        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Direction")), row, 0)
+        form.direction = QtWidgets.QComboBox()
+        layout.addWidget(form.direction, row, 1)
         row += 1
 
-        form.leadInEnabled = QtWidgets.QCheckBox(self.pageLabel("Enable lead-in"))
-        layout.addWidget(form.leadInEnabled, row, 0, 1, 2)
+        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Lead-in style")), row, 0)
+        form.leadInStyle = QtWidgets.QComboBox()
+        layout.addWidget(form.leadInStyle, row, 1)
         row += 1
 
-        form.leadOutEnabled = QtWidgets.QCheckBox(self.pageLabel("Enable lead-out"))
-        layout.addWidget(form.leadOutEnabled, row, 0, 1, 2)
+        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Lead-in length")), row, 0)
+        form.leadInLength = QtWidgets.QLineEdit()
+        layout.addWidget(form.leadInLength, row, 1)
+        row += 1
+
+        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Lead-out style")), row, 0)
+        form.leadOutStyle = QtWidgets.QComboBox()
+        layout.addWidget(form.leadOutStyle, row, 1)
+        row += 1
+
+        layout.addWidget(QtWidgets.QLabel(self.pageLabel("Lead-out length")), row, 0)
+        form.leadOutLength = QtWidgets.QLineEdit()
+        layout.addWidget(form.leadOutLength, row, 1)
         row += 1
 
         form.useStartPoint = QtWidgets.QCheckBox(self.pageLabel("Use start point"))
@@ -94,7 +101,16 @@ class TaskPanelOpPage(PathOpGui.TaskPanelPage):
         layout.setRowStretch(row, 1)
 
         enumTups = PathJetProfile.ObjectJetProfile.areaOpPropertyEnumerations(dataType="raw")
-        self.populateCombobox(form, enumTups, [("cutSide", "CutSide")])
+        self.populateCombobox(
+            form,
+            enumTups,
+            [
+                ("cutSide", "CutSide"),
+                ("direction", "Direction"),
+                ("leadInStyle", "LeadInStyle"),
+                ("leadOutStyle", "LeadOutStyle"),
+            ],
+        )
         return form
 
     def pageLabel(self, text):
@@ -102,75 +118,102 @@ class TaskPanelOpPage(PathOpGui.TaskPanelPage):
 
     def getFields(self, obj):
         self.updateToolController(obj, self.form.toolController)
-        self.updateCoolant(obj, self.form.coolantController)
 
+        obj.Direction = str(self.form.direction.currentData())
         obj.CutSide = str(self.form.cutSide.currentData())
-        self.updateKerfWidth(obj)
-        obj.LeadInEnabled = self.form.leadInEnabled.isChecked()
-        obj.LeadOutEnabled = self.form.leadOutEnabled.isChecked()
+        obj.LeadInStyle = str(self.form.leadInStyle.currentData())
+        obj.LeadOutStyle = str(self.form.leadOutStyle.currentData())
+        obj.LeadInEnabled = obj.LeadInStyle != "None"
+        obj.LeadOutEnabled = obj.LeadOutStyle != "None"
+        self.updateLeadInLength(obj)
+        self.updateLeadOutLength(obj)
         obj.UseStartPoint = self.form.useStartPoint.isChecked()
         obj.LoopCorners = self.form.loopCorners.isChecked()
         self.updateLoopCornerRadius(obj)
 
     def setFields(self, obj):
         self.setupToolController(obj, self.form.toolController)
-        self.setupCoolant(obj, self.form.coolantController)
 
+        self.selectInComboBox(getattr(obj, "Direction", "CW"), self.form.direction)
         self.selectInComboBox(obj.CutSide, self.form.cutSide)
-        self.form.kerfWidth.setText(
-            FreeCAD.Units.Quantity(obj.KerfWidth.Value, FreeCAD.Units.Length).UserString
+        lead_in_style = getattr(obj, "LeadInStyle", "None")
+        lead_out_style = getattr(obj, "LeadOutStyle", "None")
+        if lead_in_style == "None" and getattr(obj, "LeadInEnabled", False):
+            lead_in_style = "Tangent"
+        if lead_out_style == "None" and getattr(obj, "LeadOutEnabled", False):
+            lead_out_style = "Tangent"
+        self.selectInComboBox(lead_in_style, self.form.leadInStyle)
+        self.selectInComboBox(lead_out_style, self.form.leadOutStyle)
+        self.form.leadInLength.setText(
+            FreeCAD.Units.Quantity(obj.LeadInLength.Value, FreeCAD.Units.Length).UserString
         )
-        self.form.leadInEnabled.setChecked(obj.LeadInEnabled)
-        self.form.leadOutEnabled.setChecked(obj.LeadOutEnabled)
+        self.form.leadOutLength.setText(
+            FreeCAD.Units.Quantity(obj.LeadOutLength.Value, FreeCAD.Units.Length).UserString
+        )
         self.form.useStartPoint.setChecked(obj.UseStartPoint)
         self.form.loopCorners.setChecked(obj.LoopCorners)
         self.form.loopCornerRadius.setText(
             FreeCAD.Units.Quantity(obj.LoopCornerRadius.Value, FreeCAD.Units.Length).UserString
         )
 
-    def updateKerfWidth(self, obj):
-        text = self.form.kerfWidth.text().strip()
-        if not text:
-            return
+    def updateLeadInLength(self, obj):
+        self.updateDistanceField(obj, "LeadInLength", self.form.leadInLength)
 
-        try:
-            value = FreeCAD.Units.Quantity(text).getValueAs("mm")
-        except Exception:
-            return
-
-        if obj.KerfWidth.getValueAs("mm") != value:
-            obj.KerfWidth = value
+    def updateLeadOutLength(self, obj):
+        self.updateDistanceField(obj, "LeadOutLength", self.form.leadOutLength)
 
     def updateLoopCornerRadius(self, obj):
-        text = self.form.loopCornerRadius.text().strip()
+        self.updateDistanceField(obj, "LoopCornerRadius", self.form.loopCornerRadius)
+
+    def updateDistanceField(self, obj, prop_name, widget):
+        text = widget.text().strip()
         if not text:
             return
 
-        try:
-            value = FreeCAD.Units.Quantity(text).getValueAs("mm")
-        except Exception:
+        prop = getattr(obj, prop_name)
+        value = self.parseDistanceValue(prop, text)
+        if value is None:
             return
 
-        if obj.LoopCornerRadius.getValueAs("mm") != value:
-            obj.LoopCornerRadius = value
+        if not FreeCAD.Units.Quantity(prop.Value, FreeCAD.Units.Length) == FreeCAD.Units.Quantity(
+            value, FreeCAD.Units.Length
+        ):
+            setattr(obj, prop_name, value)
+        widget.setText(FreeCAD.Units.Quantity(getattr(obj, prop_name).Value, FreeCAD.Units.Length).UserString)
+
+    def parseDistanceValue(self, prop, text):
+        try:
+            return FreeCAD.Units.Quantity(text).Value
+        except Exception:
+            pass
+
+        try:
+            float(text)
+        except ValueError:
+            return None
+
+        try:
+            unit = prop.getUserPreferred()[2]
+            return FreeCAD.Units.Quantity(f"{text} {unit}").Value
+        except Exception:
+            return None
 
     def getSignalsForUpdate(self, obj):
         del obj
         signals = [
             self.form.toolController.currentIndexChanged,
-            self.form.coolantController.currentIndexChanged,
             self.form.cutSide.currentIndexChanged,
-            self.form.kerfWidth.editingFinished,
+            self.form.direction.currentIndexChanged,
+            self.form.leadInStyle.currentIndexChanged,
+            self.form.leadInLength.editingFinished,
+            self.form.leadOutStyle.currentIndexChanged,
+            self.form.leadOutLength.editingFinished,
             self.form.loopCornerRadius.editingFinished,
         ]
-        if hasattr(self.form.leadInEnabled, "checkStateChanged"):
-            signals.append(self.form.leadInEnabled.checkStateChanged)
-            signals.append(self.form.leadOutEnabled.checkStateChanged)
+        if hasattr(self.form.useStartPoint, "checkStateChanged"):
             signals.append(self.form.useStartPoint.checkStateChanged)
             signals.append(self.form.loopCorners.checkStateChanged)
         else:
-            signals.append(self.form.leadInEnabled.stateChanged)
-            signals.append(self.form.leadOutEnabled.stateChanged)
             signals.append(self.form.useStartPoint.stateChanged)
             signals.append(self.form.loopCorners.stateChanged)
         return signals

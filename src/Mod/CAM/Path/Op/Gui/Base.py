@@ -715,7 +715,25 @@ class TaskPanelPage(object):
         """updateToolController(obj, combo) ...
         helper function to update obj's ToolController property if a different
         one has been selected in the combo box."""
-        tc = PathUtils.findToolController(obj, obj.Proxy, combo.currentText())
+        try:
+            tc = PathUtils.findToolController(obj, obj.Proxy, combo.currentText())
+        except PathUtils.PathNoTCExistsException:
+            tc = getattr(obj, "ToolController", None)
+            if tc is None:
+                job = obj.Proxy.getJob(obj)
+                if job and hasattr(job, "Tools") and hasattr(job.Tools, "Group"):
+                    controllers = [
+                        candidate
+                        for candidate in job.Tools.Group
+                        if obj.Proxy.isToolSupported(obj, candidate.Tool)
+                    ]
+                    if controllers:
+                        tc = next(
+                            (candidate for candidate in controllers if candidate.Label == combo.currentText()),
+                            controllers[0],
+                        )
+            if tc is None:
+                raise
         if obj.ToolController != tc:
             obj.ToolController = tc
         if self.tcEditor:
